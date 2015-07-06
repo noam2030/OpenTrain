@@ -1,6 +1,8 @@
-package com.opentrain.app;
+package com.opentrain.app.utils;
 
 import android.util.Log;
+
+import com.opentrain.app.model.LogItem;
 
 import java.util.ArrayList;
 

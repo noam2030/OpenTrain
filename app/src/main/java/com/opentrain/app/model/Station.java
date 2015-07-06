@@ -1,4 +1,6 @@
-package com.opentrain.app;
+package com.opentrain.app.model;
+
+import com.opentrain.app.utils.TimeUtils;
 
 import java.util.HashMap;
 import java.util.Map;

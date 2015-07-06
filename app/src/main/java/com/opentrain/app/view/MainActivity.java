@@ -1,4 +1,4 @@
-package com.opentrain.app;
+package com.opentrain.app.view;
 
 import android.app.AlertDialog;
 import android.content.ComponentName;
@@ -19,12 +19,15 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.opentrain.app.R;
+import com.opentrain.app.adapter.StationsListAdapter;
+import com.opentrain.app.model.Settings;
+import com.opentrain.app.model.Station;
 import com.opentrain.app.network.NetowrkManager;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.opentrain.app.service.ScannerService;
+import com.opentrain.app.service.ServiceBroadcastReceiver;
+import com.opentrain.app.utils.CopyUtils;
 
 public class MainActivity extends AppCompatActivity {
 

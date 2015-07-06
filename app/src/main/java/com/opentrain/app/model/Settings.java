@@ -1,4 +1,4 @@
-package com.opentrain.app;
+package com.opentrain.app.model;
 
 /**
  * Created by noam on 30/05/15.

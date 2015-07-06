@@ -8,8 +8,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.opentrain.app.Logger;
-import com.opentrain.app.Settings;
+import com.opentrain.app.utils.Logger;
+import com.opentrain.app.model.Settings;
 import com.opentrain.app.model.MainModel;
 
 import java.io.BufferedReader;

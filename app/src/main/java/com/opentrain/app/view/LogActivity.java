@@ -1,10 +1,14 @@
-package com.opentrain.app;
+package com.opentrain.app.view;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+
+import com.opentrain.app.adapter.LogAdapter;
+import com.opentrain.app.utils.Logger;
+import com.opentrain.app.R;
 
 /**
  * Created by noam on 07/06/15.

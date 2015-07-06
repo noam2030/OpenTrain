@@ -1,7 +1,9 @@
-package com.opentrain.app;
+package com.opentrain.app.utils;
 
 import android.content.Context;
 import android.widget.Toast;
+
+import com.opentrain.app.model.Station;
 
 /**
  * Created by noam on 30/05/15.

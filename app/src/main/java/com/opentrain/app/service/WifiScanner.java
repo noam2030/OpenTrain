@@ -1,4 +1,4 @@
-package com.opentrain.app;
+package com.opentrain.app.service;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,10 +6,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
-import android.widget.Toast;
 
 import com.opentrain.app.model.MainModel;
+import com.opentrain.app.model.ScanResultItem;
+import com.opentrain.app.model.Settings;
+import com.opentrain.app.model.Station;
 import com.opentrain.app.network.NetowrkManager;
+import com.opentrain.app.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;

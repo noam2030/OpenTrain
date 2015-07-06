@@ -1,4 +1,4 @@
-package com.opentrain.app;
+package com.opentrain.app.service;
 
 import android.app.Service;
 import android.content.Intent;
@@ -10,6 +10,9 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
+
+import com.opentrain.app.model.Settings;
+import com.opentrain.app.model.Station;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -55,7 +58,7 @@ public class ScannerService extends Service {
     }
 
     public class LocalBinder extends Binder {
-        ScannerService getService() {
+        public ScannerService getService() {
             return ScannerService.this;
         }
     }
