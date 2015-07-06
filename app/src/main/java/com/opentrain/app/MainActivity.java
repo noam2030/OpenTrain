@@ -19,8 +19,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.opentrain.app.network.NetowrkManager;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -68,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
         startService(new Intent(this, ScannerService.class));
         doBindService();
 
-        getMapFromServer();
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -248,12 +251,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void getMapFromServer() {
         onLoadingFromServerStart();
-        new GetContentFromServer(new GetContentFromServer.GetContentListener() {
+        NetowrkManager.getInstance().getMapFromSErver(new NetowrkManager.RequestListener() {
             @Override
-            public void onGetContentResults(HashMap<String, String> results) {
+            public void onResponse(Object response) {
                 onLoadingFromServerDone();
             }
-        }).execute();
+
+            @Override
+            public void onError() {
+                onLoadingFromServerDone();
+            }
+        });
     }
 
     public void onLoadingFromServerDone() {

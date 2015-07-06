@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
+import android.widget.Toast;
+
+import com.opentrain.app.model.MainModel;
+import com.opentrain.app.network.NetowrkManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -151,20 +155,6 @@ public class WifiScanner extends BroadcastReceiver {
         station.stationName = "Not fount fo any BSSID";
     }
 
-    public void onGetContentResults(HashMap<String, String> results) {
-        if (results != null) {
-
-            for (Map.Entry<String, String> serverEntry : results.entrySet()) {
-                map.put(serverEntry.getKey(), serverEntry.getValue());
-            }
-
-            for (Station station : stationsListItems) {
-                updateBssidMapping(station);
-                setName(station);
-            }
-        }
-    }
-
     private Station updateBssidMapping(Station station) {
         if (map != null) {
             for (Map.Entry<String, String> entry : station.bssids.entrySet()) {
@@ -176,12 +166,21 @@ public class WifiScanner extends BroadcastReceiver {
 
     public void getMapFromServer() {
 
-        new GetContentFromServer(new GetContentFromServer.GetContentListener() {
+        NetowrkManager.getInstance().getMapFromSErver(new NetowrkManager.RequestListener() {
             @Override
-            public void onGetContentResults(HashMap<String, String> results) {
-                WifiScanner.this.onGetContentResults(results);
+            public void onResponse(Object response) {
+                map = MainModel.getInstance().getMap();
+                for (Station station : stationsListItems) {
+                    updateBssidMapping(station);
+                    setName(station);
+                }
             }
-        }).execute();
+
+            @Override
+            public void onError() {
+
+            }
+        });
     }
 
     public void setScanningListener(ScanningListener scanningListener) {
