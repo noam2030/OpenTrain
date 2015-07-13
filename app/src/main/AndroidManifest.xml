@@ -24,6 +24,12 @@
         <activity android:name=".view.LogActivity" />
 
         <service android:name=".service.ScannerService" />
+
+        <activity android:name="com.opentrain.app.MockMainActivity" />
+
+        <service android:name="com.opentrain.app.MockScannerService" />
+
+
     </application>
 
 </manifest>

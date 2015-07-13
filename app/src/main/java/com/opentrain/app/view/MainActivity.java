@@ -72,10 +72,15 @@ public class MainActivity extends AppCompatActivity {
 
         mReceiver = new ServiceBroadcastReceiver(this);
 
-        startService(new Intent(this, ScannerService.class));
+        startService(getServiceIntent());
         doBindService();
 
     }
+
+    protected Intent getServiceIntent() {
+        return new Intent(this, ScannerService.class);
+    }
+
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
@@ -90,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     void doBindService() {
-        bindService(new Intent(this, ScannerService.class), mConnection, Context.BIND_AUTO_CREATE);
+        bindService(getServiceIntent(), mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
     }
 
