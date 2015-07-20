@@ -6,11 +6,14 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.opentrain.app.utils.Logger;
 import com.opentrain.app.model.Settings;
 import com.opentrain.app.model.MainModel;
+
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -18,7 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by noam on 29/06/15.
@@ -49,10 +51,10 @@ public class NetowrkManager {
         return mInstance;
     }
 
-    public void getMapFromSErver(final RequestListener requestListener) {
+    public void getMapFromServer(final RequestListener requestListener) {
 
         // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Settings.url,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Settings.url_get_map_from_server,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -60,14 +62,7 @@ public class NetowrkManager {
                             HashMap<String, String> mapFromString = getMapFromString(response);
                             MainModel.getInstance().updateMap(mapFromString);
                             requestListener.onResponse(mapFromString);
-                            StringBuilder sb = new StringBuilder();
-                            for (Map.Entry<String, String> entry : mapFromString.entrySet()) {
-                                sb.append(entry.getKey());
-                                sb.append("/");
-                                sb.append(entry.getValue());
-                                sb.append("\n");
-                            }
-                            Logger.log(sb.toString());
+                            Logger.logMap(mapFromString);
                         } catch (Exception e) {
                             e.printStackTrace();
                             Logger.log(e.toString());
@@ -78,6 +73,31 @@ public class NetowrkManager {
             public void onErrorResponse(VolleyError error) {
                 requestListener.onError();
                 Logger.log("Error while getting map from server");
+            }
+        });
+        // Add the request to the RequestQueue.
+        requestQueue.add(stringRequest);
+    }
+
+    public void addMappingToServer(JSONObject jsonObject, final RequestListener requestListener) {
+
+        // Request a string response from the provided URL.
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Settings.url_add_map_to_server, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (response != null) {
+                            requestListener.onResponse(response);
+                            Logger.log(response.toString());
+                        } else {
+                            Logger.log("add map to server response is null");
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                requestListener.onError();
+                Logger.log("Error while adding map from to server");
             }
         });
         // Add the request to the RequestQueue.

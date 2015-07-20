@@ -179,10 +179,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void editServer() {
-        String url = Settings.serverUrl;
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(url));
-        startActivity(i);
+
     }
 
     private void onStationItemClick(final Station station) {
@@ -192,17 +189,18 @@ public class MainActivity extends AppCompatActivity {
 
         View view = this.getLayoutInflater().inflate(R.layout.dialog_layout, null);
 
-        TextView detail = (TextView) view.findViewById(R.id.textView);
-        detail.setText(station.toDetailString());
 
         // Set an EditText view to get user input
-        final EditText input = (EditText) view.findViewById(R.id.editText);
+        final EditText stationName = (EditText) view.findViewById(R.id.editText_station_name);
+
+        final EditText stationRouters = (EditText) view.findViewById(R.id.editText_station_routers);
+        stationRouters.setText(station.toDetailString());
 
         alert.setView(view);
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                String value = input.getText().toString();
+                String value = stationName.getText().toString();
                 CopyUtils.copyToClipboard(station, value, MainActivity.this);
             }
         });
@@ -217,14 +215,16 @@ public class MainActivity extends AppCompatActivity {
 
         View view = this.getLayoutInflater().inflate(R.layout.dialog_layout, null);
 
-        TextView detail = (TextView) view.findViewById(R.id.textView);
-        detail.setVisibility(View.GONE);
+        final EditText stationRouters = (EditText) view.findViewById(R.id.editText_station_routers);
+        stationRouters.setVisibility(View.GONE);
+        TextView routers = (TextView) view.findViewById(R.id.textView2);
+        routers.setVisibility(View.INVISIBLE);
 
         TextView current = (TextView) view.findViewById(R.id.textView1);
         current.setText("Current Search String: " + Settings.stationSSID);
 
         // Set an EditText view to get user input
-        final EditText input = (EditText) view.findViewById(R.id.editText);
+        final EditText input = (EditText) view.findViewById(R.id.editText_station_name);
 
         alert.setView(view);
 
@@ -259,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void getMapFromServer() {
         onLoadingFromServerStart();
-        NetowrkManager.getInstance().getMapFromSErver(new NetowrkManager.RequestListener() {
+        NetowrkManager.getInstance().getMapFromServer(new NetowrkManager.RequestListener() {
             @Override
             public void onResponse(Object response) {
                 onLoadingFromServerDone();

@@ -7,28 +7,36 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="20dp">
 
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Edit station name:" />
+            android:text="Station name (SSID):" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/editText_station_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/editText"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginBottom="10dp"
+            android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textView2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Station routers (BSSID's):" />
+
+        <EditText
+            android:id="@+id/editText_station_routers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:textSize="14sp" />
 
 
     </LinearLayout>

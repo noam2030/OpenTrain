@@ -169,7 +169,7 @@ public class WifiScanner extends BroadcastReceiver {
 
     public void getMapFromServer() {
 
-        NetowrkManager.getInstance().getMapFromSErver(new NetowrkManager.RequestListener() {
+        NetowrkManager.getInstance().getMapFromServer(new NetowrkManager.RequestListener() {
             @Override
             public void onResponse(Object response) {
                 map = MainModel.getInstance().getMap();
