@@ -2,14 +2,8 @@ package com.opentrain.app;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
-
 import com.opentrain.app.model.Station;
 import com.opentrain.app.network.NetowrkManager;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
 /**
