@@ -25,7 +25,7 @@ import java.util.Map;
 public class WifiScanner extends BroadcastReceiver {
 
     WifiManager mainWifi;
-
+    boolean registered;
     boolean wasStation;
     HashMap<String, String> map = new HashMap<>();
     ArrayList<Station> stationsListItems = new ArrayList<>();
@@ -47,11 +47,15 @@ public class WifiScanner extends BroadcastReceiver {
     }
 
     protected void unRegister(Context context) {
-        context.unregisterReceiver(this);
+        if (registered) {
+            context.unregisterReceiver(this);
+            registered = false;
+        }
     }
 
     protected void register(Context context) {
         context.registerReceiver(this, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        registered = true;
     }
 
     @Override

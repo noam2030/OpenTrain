@@ -90,9 +90,6 @@ public class ScannerService extends Service {
         mServiceHandler = new ServiceHandler(mServiceLooper);
 
         wifiScanner = getWifiScanner();
-        if (wifiScanner != null) {
-            wifiScanner.register(ScannerService.this);
-        }
         wifiScanner.setScanningListener(new WifiScanner.ScanningListener() {
 
             @Override
@@ -120,14 +117,15 @@ public class ScannerService extends Service {
     @Override
     public void onDestroy() {
         stopScanning();
-        if (wifiScanner != null) {
-            wifiScanner.unRegister(ScannerService.this);
-        }
     }
 
     public void startScannig() {
         isScanning = true;
         notifyStartScanning();
+
+        if (wifiScanner != null) {
+            wifiScanner.register(ScannerService.this);
+        }
 
         if (timer == null) {
             timer = new Timer();
@@ -167,7 +165,13 @@ public class ScannerService extends Service {
 
     public void stopScanning() {
         isScanning = false;
+
         notifyStopScanning();
+
+        if (wifiScanner != null) {
+            wifiScanner.unRegister(ScannerService.this);
+        }
+
         if (timer != null) {
             timer.cancel();
             timer = null;

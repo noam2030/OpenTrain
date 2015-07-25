@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.opentrain.app.R;
 import com.opentrain.app.adapter.StationsListAdapter;
@@ -27,7 +27,6 @@ import com.opentrain.app.model.Station;
 import com.opentrain.app.network.NetowrkManager;
 import com.opentrain.app.service.ScannerService;
 import com.opentrain.app.service.ServiceBroadcastReceiver;
-import com.opentrain.app.utils.CopyUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Station station = (Station) parent.getAdapter().getItem(position);
-                onStationItemClick(station);
+                onStationItemClick(station, false);
             }
         });
 
@@ -179,13 +178,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void editServer() {
-
+        Station station = new Station();
+        onStationItemClick(station, true);
     }
 
-    private void onStationItemClick(final Station station) {
+    private void onStationItemClick(final Station station, final boolean enableEditBSSIDs) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-        alert.setTitle("Station name: " + station.stationName);
+        alert.setTitle("Edit Station:");
 
         View view = this.getLayoutInflater().inflate(R.layout.dialog_layout, null);
 
@@ -194,16 +194,26 @@ public class MainActivity extends AppCompatActivity {
         final EditText stationName = (EditText) view.findViewById(R.id.editText_station_name);
 
         final EditText stationRouters = (EditText) view.findViewById(R.id.editText_station_routers);
-        stationRouters.setText(station.toDetailString());
+        stationRouters.setEnabled(enableEditBSSIDs);
+        stationRouters.setText(station.getUnMappedBSSIDs());
 
         alert.setView(view);
 
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton("Edit server", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String value = stationName.getText().toString();
-                CopyUtils.copyToClipboard(station, value, MainActivity.this);
+                if (value.length() > 0) {
+                    station.stationName = value;
+                    if (enableEditBSSIDs) {
+                        String bssids = stationRouters.getText().toString();
+                        station.setUnMappedBSSIDs(bssids);
+                    }
+                    addMapToServer(station);
+                }
             }
         });
+
+        alert.setNegativeButton("Cancel", null);
 
         alert.show();
     }
@@ -258,25 +268,46 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getMapFromServer() {
-        onLoadingFromServerStart();
+        onRequestStart();
         NetowrkManager.getInstance().getMapFromServer(new NetowrkManager.RequestListener() {
             @Override
             public void onResponse(Object response) {
-                onLoadingFromServerDone();
+                toast("Succes!");
+                onRequestDone();
             }
 
             @Override
             public void onError() {
-                onLoadingFromServerDone();
+                toast("Fail to get map from server");
+                onRequestDone();
+
             }
         });
     }
 
-    public void onLoadingFromServerDone() {
+    public void addMapToServer(Station station) {
+        onRequestStart();
+        NetowrkManager.getInstance().addMappingToServer(station.getPostParam(), new NetowrkManager.RequestListener() {
+            @Override
+            public void onResponse(Object response) {
+                toast("Succes!");
+                onRequestDone();
+            }
+
+            @Override
+            public void onError() {
+                toast("Fail to edit server");
+                onRequestDone();
+
+            }
+        });
+    }
+
+    public void onRequestDone() {
         progressBarSyncSever.setVisibility(View.INVISIBLE);
     }
 
-    public void onLoadingFromServerStart() {
+    public void onRequestStart() {
         progressBarSyncSever.setVisibility(View.VISIBLE);
     }
 
@@ -309,5 +340,9 @@ public class MainActivity extends AppCompatActivity {
         if (mBoundService != null) {
             stationsListAdapter.setItems(mBoundService.getScanningItems());
         }
+    }
+
+    private void toast(String str) {
+        Toast.makeText(this, str, Toast.LENGTH_LONG).show();
     }
 }

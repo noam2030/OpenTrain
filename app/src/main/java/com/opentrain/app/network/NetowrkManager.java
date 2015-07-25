@@ -99,7 +99,7 @@ public class NetowrkManager {
             @Override
             public void onErrorResponse(VolleyError error) {
                 requestListener.onError();
-                Logger.log("Error while adding map from to server");
+                Logger.log("Error while adding map from to server " + error.getMessage());
             }
         });
         // Add the request to the RequestQueue.

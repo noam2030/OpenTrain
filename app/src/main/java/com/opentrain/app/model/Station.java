@@ -1,7 +1,13 @@
 package com.opentrain.app.model;
 
+import com.opentrain.app.utils.Logger;
 import com.opentrain.app.utils.TimeUtils;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -104,19 +110,49 @@ public class Station {
         return stringBuilderMapped.toString() + "\n" + stringBuilderUnMapped.toString() + "\n";
     }
 
-    public String copyUnMapped(String editedName) {
+    public String getUnMappedBSSIDs() {
 
         StringBuilder stringBuilderUnMapped = new StringBuilder();
 
         for (Map.Entry<String, String> entry : bssids.entrySet()) {
             if (entry.getValue() == null) {
                 stringBuilderUnMapped.append(entry.getKey());
-                stringBuilderUnMapped.append(" ");
-                stringBuilderUnMapped.append(editedName);
                 stringBuilderUnMapped.append("\n");
             }
+
         }
 
         return stringBuilderUnMapped.toString();
+    }
+
+    public void setUnMappedBSSIDs(String str) {
+
+        try {
+            String[] bssidsStrings = str.split("\n");
+            for (String bssid : bssidsStrings) {
+                bssids.put(bssid, null);
+            }
+        } catch (Exception e) {
+            Logger.log(e.toString());
+        }
+    }
+
+    public JSONObject getPostParam() {
+
+        JSONArray routerArray = new JSONArray();
+        for (Map.Entry<String, String> entry : bssids.entrySet()) {
+            if (entry.getValue() == null) {
+                routerArray.put(entry.getKey());
+            }
+        }
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("name", stationName);
+            jsonObject.put("bssid", routerArray.get(0));
+        } catch (JSONException e) {
+            Logger.log(e.toString());
+        }
+
+        return jsonObject;
     }
 }

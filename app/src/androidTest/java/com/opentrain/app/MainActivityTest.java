@@ -3,6 +3,7 @@ package com.opentrain.app;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 
+import com.opentrain.app.model.Station;
 import com.opentrain.app.network.NetowrkManager;
 
 import org.json.JSONArray;
@@ -56,22 +57,12 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MockMainA
 
     public void test2AddMappingToServer() throws Throwable {
 
+        Station station = new Station();
+        station.stationName = "StationNameTest";
+        station.bssids.put("b4:c7:99:0b:aa:c1", null);
+        station.bssids.put("b4:c7:99:0b:d4:90", null);
 
-        String stationName = "Hi Yossi!";
-        ArrayList<String> routers = new ArrayList<>();
-        routers.add("b4:c7:99:0b:aa:c1");
-        routers.add("b4:c7:99:0b:d4:90");
-
-
-        JSONArray routerArray = new JSONArray();
-        for (String router : routers) {
-            routerArray.put(router);
-        }
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("name", stationName);
-        jsonObject.put("bssid", routers.get(0));
-
-        NetowrkManager.getInstance().addMappingToServer(jsonObject, new NetowrkManager.RequestListener() {
+        NetowrkManager.getInstance().addMappingToServer(station.getPostParam(), new NetowrkManager.RequestListener() {
             @Override
             public void onResponse(Object response) {
 
