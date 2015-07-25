@@ -3,9 +3,12 @@ package com.opentrain.app;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 
+import com.opentrain.app.model.MainModel;
 import com.opentrain.app.model.Settings;
 import com.opentrain.app.model.Station;
 import com.opentrain.app.network.NetowrkManager;
+
+import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -49,6 +52,13 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MockMainA
                 countDownLatch.countDown();
             }
         });
+
+        HashMap<String, String> mockResult = new HashMap<>();
+        mockResult.put("1", "Station 1");
+        mockResult.put("2", "Station 2");
+        mockResult.put("3", "Station 3");
+        mockResult.put("4", "Station 4");
+        MainModel.getInstance().updateMap(mockResult);
 
         countDownLatch.await();
     }

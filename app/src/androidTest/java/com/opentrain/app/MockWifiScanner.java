@@ -2,6 +2,7 @@ package com.opentrain.app;
 
 import android.content.Context;
 
+import com.opentrain.app.model.MainModel;
 import com.opentrain.app.model.ScanResultItem;
 import com.opentrain.app.model.Settings;
 import com.opentrain.app.service.WifiScanner;
@@ -46,6 +47,8 @@ public class MockWifiScanner extends WifiScanner {
         mockResultsList.add(mockList);
 
         index = 0;
+
+        map = MainModel.getInstance().getMap();
     }
 
     private ScanResultItem getStationSannItem(String bssid) {
@@ -70,9 +73,6 @@ public class MockWifiScanner extends WifiScanner {
         }
         reportScanResult(getScanResult());
         index++;
-        if (index == mockResultsList.size()) {
-            index = 0;
-        }
     }
 
     private ArrayList<ScanResultItem> getScanResult() {

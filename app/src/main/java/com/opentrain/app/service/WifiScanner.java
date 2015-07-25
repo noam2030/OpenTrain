@@ -27,7 +27,7 @@ public class WifiScanner extends BroadcastReceiver {
     WifiManager mainWifi;
     boolean registered;
     boolean wasStation;
-    HashMap<String, String> map = new HashMap<>();
+    protected HashMap<String, String> map = new HashMap<>();
     ArrayList<Station> stationsListItems = new ArrayList<>();
     private ScanningListener scanningListener;
 
@@ -91,13 +91,13 @@ public class WifiScanner extends BroadcastReceiver {
     public void onSanningResults(List<ScanResultItem> scanResults) {
         if (scanResults != null && scanResults.size() > 0) {
 
-            Station station = isStation(scanResults);
-            boolean isStation = station != null;
+            boolean isStation = isStation(scanResults);
 
             Logger.log("onSanningResults, isStation: " + isStation + " ,wasStation: " + wasStation);
 
             if (isStation) {
 
+                Station station = getStation(scanResults);
                 setName(station);
 
                 //enter station
@@ -132,7 +132,18 @@ public class WifiScanner extends BroadcastReceiver {
         }
     }
 
-    public Station isStation(List<ScanResultItem> scanResults) {
+    public boolean isStation(List<ScanResultItem> scanResults) {
+
+        for (ScanResultItem scanResult : scanResults) {
+            if (Settings.stationSSID.equals(scanResult.SSID)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public Station getStation(List<ScanResultItem> scanResults) {
 
         Station station = null;
         for (ScanResultItem scanResult : scanResults) {
@@ -159,7 +170,7 @@ public class WifiScanner extends BroadcastReceiver {
             }
         }
 
-        station.stationName = "Not fount fo any BSSID";
+        station.stationName = "Not found fo any BSSID";
     }
 
     private Station updateBssidMapping(Station station) {
