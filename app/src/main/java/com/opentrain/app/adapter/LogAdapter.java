@@ -59,7 +59,7 @@ public class LogAdapter extends BaseAdapter {
 
         LogItem logItem = logItems.get(position);
 
-        stationViewHolder.textView1.setText("Log: " + position + " (" + TimeUtils.getFormattedTime() + ") " + logItem.msg);
+        stationViewHolder.textView1.setText("Log: " + position + " (" + TimeUtils.getFormattedTime() + ") " + "\n" + logItem.msg);
 
         return convertView;
     }

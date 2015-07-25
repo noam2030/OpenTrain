@@ -53,6 +53,7 @@ public class NetowrkManager {
 
     public void getMapFromServer(final RequestListener requestListener) {
 
+        Logger.log("get Map From Server." + Settings.url_get_map_from_server);
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Settings.url_get_map_from_server,
                 new Response.Listener<String>() {
@@ -72,7 +73,7 @@ public class NetowrkManager {
             @Override
             public void onErrorResponse(VolleyError error) {
                 requestListener.onError();
-                Logger.log("Error while getting map from server");
+                Logger.log("Error while getting map from server " + error.getMessage());
             }
         });
         // Add the request to the RequestQueue.
