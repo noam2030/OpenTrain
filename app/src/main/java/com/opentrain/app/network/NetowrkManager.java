@@ -53,7 +53,7 @@ public class NetowrkManager {
 
     public void getMapFromServer(final RequestListener requestListener) {
 
-        Logger.log("get Map From Server." + Settings.url_get_map_from_server);
+        Logger.log("get map from server. server url:" + Settings.url_get_map_from_server);
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Settings.url_get_map_from_server,
                 new Response.Listener<String>() {
@@ -82,6 +82,7 @@ public class NetowrkManager {
 
     public void addMappingToServer(JSONObject jsonObject, final RequestListener requestListener) {
 
+        Logger.log("add map to server. server url: " + Settings.url_add_map_to_server + " ,post params:" + jsonObject.toString());
         // Request a string response from the provided URL.
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Settings.url_add_map_to_server, jsonObject,
                 new Response.Listener<JSONObject>() {
