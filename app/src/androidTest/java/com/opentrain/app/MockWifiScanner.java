@@ -14,8 +14,13 @@ import java.util.ArrayList;
  */
 public class MockWifiScanner extends WifiScanner {
 
+    public interface MockWifiScanListener {
+        void onScanDone();
+    }
+
     ArrayList<ArrayList<ScanResultItem>> mockResultsList = new ArrayList<>();
     private int index;
+    public static MockWifiScanListener mockWifiScanListener;
 
     public MockWifiScanner(Context context) {
         super(context);
@@ -66,6 +71,14 @@ public class MockWifiScanner extends WifiScanner {
     }
 
     public void startScanning() {
+
+        if (index >= mockResultsList.size()) {
+            if (mockWifiScanListener != null) {
+                mockWifiScanListener.onScanDone();
+            }
+            return;
+        }
+
         try {
             Thread.sleep(1000);
         } catch (Exception e) {
