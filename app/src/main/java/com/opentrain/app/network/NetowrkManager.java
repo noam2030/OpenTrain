@@ -12,14 +12,8 @@ import com.android.volley.toolbox.Volley;
 import com.opentrain.app.utils.Logger;
 import com.opentrain.app.model.Settings;
 import com.opentrain.app.model.MainModel;
-
+import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 
 /**
@@ -108,34 +102,19 @@ public class NetowrkManager {
 
     private HashMap<String, String> getMapFromString(String response) throws Exception {
 
-        InputStream stream = new ByteArrayInputStream(response.getBytes("UTF-8"));
-
-        BufferedReader reader = new BufferedReader(new
-                InputStreamReader(stream, "UTF-8"));
-
         HashMap<String, String> map = new HashMap<>();
-        String line;
         try {
-            while ((line = reader.readLine()) != null) {
-                if (line.startsWith("#")) {
-                    continue;
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("networks");
+            for (int i = 0, j = jsonArray.length(); i < j; i++) {
+                try {
+                    JSONObject station = jsonArray.getJSONObject(i);
+                    map.put(station.getString("bssid"), station.getString("name"));
+                } catch (Exception e) {
+                    Logger.log(e.toString());
                 }
-                String[] strs = line.split(" ");
-
-                if (strs.length > 0) {
-                    String key = strs[0];
-
-                    String value = "";
-                    if (strs.length > 1) {
-                        for (int i = 1; i < strs.length; i++) {
-                            value += strs[i] + " ";
-                        }
-                    }
-                    map.put(key, value);
-                }
-
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Logger.log(e.toString());
         }
