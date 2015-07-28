@@ -8,8 +8,8 @@ android {
         applicationId "il.org.hasadna.opentrain"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 116
-        versionName "0.8.6"
+        versionCode 117
+        versionName "0.8.7"
     }
     buildTypes {
         release {
