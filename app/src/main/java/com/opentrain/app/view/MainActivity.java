@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText stationRouters = (EditText) view.findViewById(R.id.editText_station_routers);
         stationRouters.setEnabled(enableEditBSSIDs);
-        stationRouters.setText(station.getUnMappedBSSIDs());
+        stationRouters.setText(station.getBSSIDs());
 
         alert.setView(view);
 

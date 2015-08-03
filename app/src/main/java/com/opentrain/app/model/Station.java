@@ -119,7 +119,18 @@ public class Station {
                 stringBuilderUnMapped.append(entry.getKey());
                 stringBuilderUnMapped.append("\n");
             }
+        }
 
+        return stringBuilderUnMapped.toString();
+    }
+
+    public String getBSSIDs() {
+
+        StringBuilder stringBuilderUnMapped = new StringBuilder();
+
+        for (Map.Entry<String, String> entry : bssids.entrySet()) {
+            stringBuilderUnMapped.append(entry.getKey());
+            stringBuilderUnMapped.append("\n");
         }
 
         return stringBuilderUnMapped.toString();
