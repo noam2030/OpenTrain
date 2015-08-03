@@ -1,6 +1,7 @@
 package com.opentrain.app;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.View;
 import android.widget.Button;
 
 import com.opentrain.app.model.MainModel;
@@ -43,7 +44,22 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MockMainA
         MockWifiScanner.mockWifiScanListener = new MockWifiScanner.MockWifiScanListener() {
             @Override
             public void onScanDone() {
-                countDownLatch.countDown();
+                try {
+                    runTestOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            button.performClick();
+                            button.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    countDownLatch.countDown();
+                                }
+                            });
+                        }
+                    });
+                } catch (Throwable e) {
+
+                }
             }
         };
     }

@@ -322,10 +322,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void onStartScanning() {
         button.setText("Stop tracking");
+        onStartScan();
     }
 
     public void onStopScanning() {
         button.setText("Start tracking");
+        onStopScan();
     }
 
     public void onStopScan() {
