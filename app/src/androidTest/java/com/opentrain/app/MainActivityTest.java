@@ -39,7 +39,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MockMainA
         mockResult.put("2", "Station 2");
         mockResult.put("3", "Station 3");
         mockResult.put("4", "Station 4");
-        MainModel.getInstance().updateMap(mockResult);
+        //MainModel.getInstance().updateMap(mockResult);
 
         MockWifiScanner.mockWifiScanListener = new MockWifiScanner.MockWifiScanListener() {
             @Override

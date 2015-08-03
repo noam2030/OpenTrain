@@ -69,19 +69,18 @@ public class WifiScanner extends BroadcastReceiver {
                 scanResultItem.BSSID = scanResult.BSSID;
                 scanResultItem.SSID = scanResult.SSID;
                 scanResultItems.add(scanResultItem);
-
             }
         }
         reportScanResult(scanResultItems);
     }
 
     public void reportScanResult(ArrayList<ScanResultItem> results) {
-        onSanningResults(results);
         if (results != null && results.size() > 0) {
             for (ScanResultItem scanResultItem : results) {
                 Logger.log("scan result: " + scanResultItem.toString());
             }
         }
+        onSanningResults(results);
         if (scanningListener != null) {
             scanningListener.onSannResult();
         }
@@ -93,15 +92,10 @@ public class WifiScanner extends BroadcastReceiver {
 
             boolean isStation = isStation(scanResults);
 
-            Logger.log("onSanningResults, isStation: " + isStation + " ,wasStation: " + wasStation);
-
             if (isStation) {
 
                 Station station = getStation(scanResults);
                 setName(station);
-
-                //enter station
-                Logger.log("station name: " + station.stationName);
 
                 boolean exist = false;
                 if (stationsListItems.size() > 0) {
@@ -116,8 +110,10 @@ public class WifiScanner extends BroadcastReceiver {
                     //we get in to new station
                     station.setArrive(System.currentTimeMillis());
                     stationsListItems.add(station);
+                    Logger.log("arrive to new station: " + station.stationName);
+                } else {
+                    Logger.log("still in station: " + station.stationName);
                 }
-                Logger.log("arrive to station: " + station.stationName + ", " + "exist:" + exist);
 
             } else if (wasStation) {
                 //exit station
@@ -126,6 +122,8 @@ public class WifiScanner extends BroadcastReceiver {
                     s.setDeparture(System.currentTimeMillis());
                 }
                 Logger.log("exit from station!");
+            } else {
+                Logger.log("not station!");
             }
 
             wasStation = isStation;
