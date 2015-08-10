@@ -152,9 +152,7 @@ public class Station {
 
         JSONArray routerArray = new JSONArray();
         for (Map.Entry<String, String> entry : bssids.entrySet()) {
-            if (entry.getValue() == null) {
-                routerArray.put(entry.getKey());
-            }
+            routerArray.put(entry.getKey());
         }
         JSONObject jsonObject = new JSONObject();
         try {
