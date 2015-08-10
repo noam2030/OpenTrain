@@ -97,33 +97,23 @@ public class WifiScanner extends BroadcastReceiver {
                 Station station = getStation(scanResults);
                 setName(station);
 
-                boolean exist = false;
-                if (stationsListItems.size() > 0) {
-                    Station lastStation = stationsListItems.get(stationsListItems.size() - 1);
-                    if (lastStation.isEqual(station)) {
-                        //we are still in the station (probably miss one scan indication)
-                        lastStation.updateBssids(station);
-                        exist = true;
-                    }
-                }
-                if (!exist) {
-                    //we get in to new station
+                if (!wasStation) {
                     station.setArrive(System.currentTimeMillis());
                     stationsListItems.add(station);
-                    Logger.log("arrive to new station: " + station.stationName);
+                    Logger.log("enter to station: " + station.stationName);
                 } else {
-                    Logger.log("still in station: " + station.stationName);
+                    Logger.log("remain in station: " + station.stationName);
                 }
-
-            } else if (wasStation) {
-                //exit station
-                if (stationsListItems.size() > 0) {
-                    Station s = stationsListItems.get(stationsListItems.size() - 1);
-                    s.setDeparture(System.currentTimeMillis());
-                }
-                Logger.log("exit from station!");
             } else {
-                Logger.log("not station!");
+                if (wasStation) {
+                    if (stationsListItems.size() > 0) {
+                        Station s = stationsListItems.get(stationsListItems.size() - 1);
+                        s.setDeparture(System.currentTimeMillis());
+                    }
+                    Logger.log("exit from station!");
+                } else {
+                    Logger.log("not station!");
+                }
             }
 
             wasStation = isStation;
