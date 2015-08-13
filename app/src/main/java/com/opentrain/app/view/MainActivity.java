@@ -84,12 +84,12 @@ public class MainActivity extends AppCompatActivity {
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
             mBoundService = ((ScannerService.LocalBinder) service).getService();
-            updateUI();
+            updateConnectionState();
         }
 
         public void onServiceDisconnected(ComponentName className) {
             mBoundService = null;
-            updateUI();
+            updateConnectionState();
         }
     };
 
@@ -138,7 +138,8 @@ public class MainActivity extends AppCompatActivity {
         if (mBoundService != null) {
             mBoundService.onResume();
         }
-        updateUI();
+        updateConnectionState();
+        onScanResult();
     }
 
     @Override
@@ -168,9 +169,17 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.action_view_logs) {
             onViewLogsClick();
             return true;
+        } else if (id == R.id.action_test_trip) {
+            onTestClick();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void onTestClick() {
+        stopScanning();
+
     }
 
     private void onViewLogsClick() {
@@ -255,9 +264,9 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         if (mBoundService.isScanning()) {
-            mBoundService.stopScanning();
+            stopScanning();
         } else {
-            mBoundService.startScannig();
+            startScanning();
         }
     }
 
@@ -311,18 +320,28 @@ public class MainActivity extends AppCompatActivity {
         progressBarSyncSever.setVisibility(View.VISIBLE);
     }
 
-    public void updateUI() {
+    public void updateConnectionState() {
         if (mBoundService != null && mBoundService.isScanning()) {
             onStartScanning();
         } else {
             onStopScanning();
         }
-        onScanResult();
+    }
+
+    private void startScanning() {
+        if (mBoundService != null && !mBoundService.isScanning()) {
+            mBoundService.startScannig();
+        }
+    }
+
+    private void stopScanning() {
+        if (mBoundService != null && mBoundService.isScanning()) {
+            mBoundService.stopScanning();
+        }
     }
 
     public void onStartScanning() {
         button.setText("Stop tracking");
-        onStartScan();
     }
 
     public void onStopScanning() {
