@@ -368,15 +368,33 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onTestClick() {
 
-        if (mBoundService == null) {
-            return;
-        }
+        onRequestStart();
+        NetowrkManager.getInstance().getTestTripFromServer(new NetowrkManager.RequestListener() {
+            @Override
+            public void onResponse(Object response) {
+                onRequestDone();
+                if (mBoundService == null) {
+                    Logger.log("cant simulate trip. service is null!!");
+                    toast("Cant run test. service is down");
+                    return;
+                }
+                if (MainModel.getInstance().getMockResultsList().size() == 0) {
+                    toast("Trip response is empty..!");
+                } else {
+                    toast("Test trip start");
+                    startTestTrip();
+                }
+            }
 
-        mBoundService.clearItems();
-        stopScanning();
-        mBoundService.setTestWifiScanner();
-        Settings.setTestSettings();
-        Logger.clearItems();
+            @Override
+            public void onError() {
+                toast("Fail to get test trip from server");
+                onRequestDone();
+            }
+        });
+    }
+
+    private void startTestTrip() {
 
         HashMap<String, String> mockResult = new HashMap<>();
         mockResult.put("1", "Station 1");
@@ -385,15 +403,20 @@ public class MainActivity extends AppCompatActivity {
         mockResult.put("4", "Station 4");
         MainModel.getInstance().updateMap(mockResult);
 
+        mBoundService.clearItems();
+        stopScanning();
+        mBoundService.setTestWifiScanner();
+        Settings.setTestSettings();
+        Logger.clearItems();
+
         MockWifiScanner.mockWifiScanListener = new MockWifiScanner.MockWifiScanListener() {
             @Override
             public void onScanDone() {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        stopScanning();
-                        mBoundService.setTrainWifiScanner();
-                        Settings.setDefaultettings();
+                        toast("Test trip done!");
+                        stopTestTrip();
                     }
                 });
             }
@@ -406,5 +429,11 @@ public class MainActivity extends AppCompatActivity {
                 startScanning();
             }
         }, 1000);
+    }
+
+    private void stopTestTrip() {
+        stopScanning();
+        mBoundService.setTrainWifiScanner();
+        Settings.setDefaultettings();
     }
 }

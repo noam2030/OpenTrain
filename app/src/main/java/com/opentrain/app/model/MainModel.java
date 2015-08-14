@@ -1,5 +1,6 @@
 package com.opentrain.app.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ public class MainModel {
     }
 
     private HashMap<String, String> map = new HashMap<>();
+    private ArrayList<ArrayList<ScanResultItem>> mockResultsList = new ArrayList<>();
 
     public void updateMap(HashMap<String, String> results) {
         for (Map.Entry<String, String> serverEntry : results.entrySet()) {
@@ -27,5 +29,13 @@ public class MainModel {
 
     public HashMap<String, String> getMap() {
         return map;
+    }
+
+    public ArrayList<ArrayList<ScanResultItem>> getMockResultsList() {
+        return mockResultsList;
+    }
+
+    public void setMockResultsList(ArrayList<ArrayList<ScanResultItem>> mockResultsList) {
+        this.mockResultsList = mockResultsList;
     }
 }

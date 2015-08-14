@@ -3,6 +3,7 @@ package com.opentrain.app.utils;
 import android.util.Log;
 
 import com.opentrain.app.model.LogItem;
+import com.opentrain.app.model.ScanResultItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +43,23 @@ public class Logger {
             Logger.log(sb.toString());
         } else {
             Logger.log("map is null");
+        }
+    }
+
+    public static void logList(ArrayList<ArrayList<ScanResultItem>> list) {
+        if (list != null) {
+            StringBuilder sb = new StringBuilder();
+            for (ArrayList<ScanResultItem> scanList : list) {
+                for (ScanResultItem scanResult : scanList) {
+                    sb.append(scanResult.SSID);
+                    sb.append("/");
+                    sb.append(scanResult.BSSID);
+                    sb.append("\n");
+                }
+            }
+            Logger.log(sb.toString());
+        } else {
+            Logger.log("list is null");
         }
     }
 }
