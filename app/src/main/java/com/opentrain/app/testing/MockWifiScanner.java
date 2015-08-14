@@ -1,4 +1,4 @@
-package com.opentrain.app;
+package com.opentrain.app.testing;
 
 import android.content.Context;
 

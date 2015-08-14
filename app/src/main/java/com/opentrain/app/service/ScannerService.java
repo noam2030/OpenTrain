@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.opentrain.app.model.Settings;
 import com.opentrain.app.model.Station;
+import com.opentrain.app.testing.MockWifiScanner;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -89,19 +90,25 @@ public class ScannerService extends Service {
         Looper mServiceLooper = thread.getLooper();
         mServiceHandler = new ServiceHandler(mServiceLooper);
 
-        wifiScanner = getWifiScanner();
-        wifiScanner.setScanningListener(new WifiScanner.ScanningListener() {
-
-            @Override
-            public void onSannResult() {
-                notifyScanResults();
-            }
-        });
+        setTrainWifiScanner();
     }
 
-    public WifiScanner getWifiScanner() {
-        return new WifiScanner(this);
+    public void setTrainWifiScanner() {
+        wifiScanner = new WifiScanner(this);
+        wifiScanner.setScanningListener(scannResultListener);
     }
+
+    public void setTestWifiScanner() {
+        wifiScanner = new MockWifiScanner(this);
+        wifiScanner.setScanningListener(scannResultListener);
+    }
+
+    private WifiScanner.ScanningListener scannResultListener = new WifiScanner.ScanningListener() {
+        @Override
+        public void onSannResult() {
+            notifyScanResults();
+        }
+    };
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

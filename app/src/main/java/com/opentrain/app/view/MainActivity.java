@@ -22,11 +22,16 @@ import android.widget.Toast;
 
 import com.opentrain.app.R;
 import com.opentrain.app.adapter.StationsListAdapter;
+import com.opentrain.app.model.MainModel;
 import com.opentrain.app.model.Settings;
 import com.opentrain.app.model.Station;
 import com.opentrain.app.network.NetowrkManager;
 import com.opentrain.app.service.ScannerService;
 import com.opentrain.app.service.ServiceBroadcastReceiver;
+import com.opentrain.app.testing.MockWifiScanner;
+import com.opentrain.app.utils.Logger;
+
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -177,11 +182,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void onTestClick() {
-        stopScanning();
-
-    }
-
     private void onViewLogsClick() {
         startActivity(new Intent(this, LogActivity.class));
     }
@@ -307,7 +307,6 @@ public class MainActivity extends AppCompatActivity {
             public void onError() {
                 toast("Fail to edit server");
                 onRequestDone();
-
             }
         });
     }
@@ -365,5 +364,45 @@ public class MainActivity extends AppCompatActivity {
 
     private void toast(String str) {
         Toast.makeText(this, str, Toast.LENGTH_LONG).show();
+    }
+
+    protected void onTestClick() {
+
+        if (mBoundService == null) {
+            return;
+        }
+
+        mBoundService.clearItems();
+        stopScanning();
+        mBoundService.setTestWifiScanner();
+        Settings.setTestSettings();
+        Logger.clearItems();
+
+        HashMap<String, String> mockResult = new HashMap<>();
+        mockResult.put("1", "Station 1");
+        mockResult.put("2", "Station 2");
+        mockResult.put("3", "Station 3");
+        mockResult.put("4", "Station 4");
+        MainModel.getInstance().updateMap(mockResult);
+
+        MockWifiScanner.mockWifiScanListener = new MockWifiScanner.MockWifiScanListener() {
+            @Override
+            public void onScanDone() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        stopScanning();
+                    }
+                });
+            }
+        };
+
+        android.os.Handler handler = new android.os.Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startScanning();
+            }
+        }, 1000);
     }
 }
