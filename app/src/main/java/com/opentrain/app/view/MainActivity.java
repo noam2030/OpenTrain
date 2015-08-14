@@ -392,6 +392,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         stopScanning();
+                        mBoundService.setTrainWifiScanner();
+                        Settings.setDefaultettings();
                     }
                 });
             }
