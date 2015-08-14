@@ -132,7 +132,7 @@ public class NetowrkManager {
     }
 
     public void getTestTripFromServer(final RequestListener requestListener) {
-        // Request a string response from the provided URL.
+        Logger.log("get test from server. server url:" + Settings.url_get_test_from_server);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Settings.url_get_test_from_server,
                 new Response.Listener<String>() {
                     @Override
